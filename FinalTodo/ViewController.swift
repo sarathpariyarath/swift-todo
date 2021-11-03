@@ -102,7 +102,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        //selected person
+        //selected list
         let todoList = self.items![indexPath.row]
         
         //create alert
@@ -118,7 +118,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             let textfield = alert.textFields![0]
             
             let editList = self.items?[indexPath.row]
-            //edit name property of person object
+            //edit list property of person object
             
             editList?.todoList = textfield.text
             
@@ -147,7 +147,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         let action = UIContextualAction(style: .destructive, title: "remove") { (action, view, completionHandler) in
             
             
-            //which person to remove
+            //which list to remove
             
             let noteToRemove = self.items?[indexPath.row]
             

@@ -53,6 +53,7 @@
                             <constraint firstItem="qqk-0D-f39" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="1" id="MbX-yA-yFT"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="qqk-0D-f39" secondAttribute="trailing" constant="32" id="Xjp-l0-K5R"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="uha-eP-6ow" secondAttribute="bottom" id="fHr-6w-wr5"/>
+                            <constraint firstItem="qqk-0D-f39" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" symbolic="YES" id="sKF-C7-gya"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Make a list" id="8kY-59-ObZ"/>
