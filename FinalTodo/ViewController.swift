@@ -57,16 +57,19 @@ class ViewController: UIViewController {
             let textField = alert.textFields![0]
             //TODO Create a person object
             
-            let newPerson = Todo(context: self.context)
-            newPerson.todoList = textField.text
-         
-            
-            //TODO save the data
-            do {
-               try self.context.save()
-            } catch {
-                print("Error")
+            if textField.text != "" {
+                let newPerson = Todo(context: self.context)
+                newPerson.todoList = textField.text
+             
+                
+                //TODO save the data
+                do {
+                   try self.context.save()
+                } catch {
+                    print("Error")
+                }
             }
+            
            
             
             //TODO refetch the data
