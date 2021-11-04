@@ -21,6 +21,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         //do any aditional setup after loading the view
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.yellow]
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -56,21 +57,18 @@ class ViewController: UIViewController {
             //get the textfield for alert
             let textField = alert.textFields![0]
             //TODO Create a person object
-            
             if textField.text != "" {
-                let newPerson = Todo(context: self.context)
-                newPerson.todoList = textField.text
-             
-                
-                //TODO save the data
-                do {
-                   try self.context.save()
-                } catch {
-                    print("Error")
-                }
-            }
+            let newPerson = Todo(context: self.context)
+            newPerson.todoList = textField.text
+         
             
-           
+            //TODO save the data
+            do {
+               try self.context.save()
+            } catch {
+                print("Error")
+            }
+        }
             
             //TODO refetch the data
             self.fetchTodoList()
@@ -96,6 +94,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
        
         let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath)
+        
         //get person from array and set the label
         let todoList = self.items![indexPath.row]
         cell.textLabel?.text = ("\(indexPath.row+1).  \(todoList.todoList!)")
@@ -121,7 +120,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             let textfield = alert.textFields![0]
             
             let editList = self.items?[indexPath.row]
-            //edit list property of person object
+            //edit list property of list object
             
             editList?.todoList = textfield.text
             
