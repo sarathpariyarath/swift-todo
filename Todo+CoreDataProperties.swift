@@ -2,7 +2,7 @@
 //  Todo+CoreDataProperties.swift
 //  FinalTodo
 //
-//  Created by Sarath P on 03/11/21.
+//  Created by Sarath P on 05/11/21.
 //
 //
 
@@ -17,6 +17,7 @@ extension Todo {
     }
 
     @NSManaged public var todoList: String?
+    @NSManaged public var state: Bool
 
 }
 

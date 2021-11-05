@@ -7,9 +7,13 @@
 
 import UIKit
 
+
 class ViewController: UIViewController {
     
     
+    
+    
+   
     @IBOutlet weak var tableView: UITableView!
     //reference to ns managed object context
     
@@ -17,7 +21,7 @@ class ViewController: UIViewController {
     
     //data for the table
     var items: [Todo]?
-    
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
         //do any aditional setup after loading the view
@@ -45,60 +49,87 @@ class ViewController: UIViewController {
         
         
     }
-    @IBAction func addTapped(_ sender: Any) {
-        
+    func buttonTapped (hello: String) {
+        let attributedString = NSAttributedString(string: hello, attributes: [
+                    NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15),
+                    NSAttributedString.Key.foregroundColor : UIColor.red
+                ])
         //create alert
-        let alert = UIAlertController.init(title: "Todo", message: "Add something", preferredStyle: .alert)
+        let alert = UIAlertController.init(title: "Todo", message: "", preferredStyle: .alert)
+        alert.setValue(attributedString, forKey: "attributedMessage")
         alert.addTextField()
+        
         
         //configure button handler
         let submitButton = UIAlertAction(title: "Add", style: .default) { (action) in
             
             //get the textfield for alert
             let textField = alert.textFields![0]
+            textField.placeholder = "Enter Something"
             //TODO Create a person object
-            if textField.text != "" {
-            let newPerson = Todo(context: self.context)
-            newPerson.todoList = textField.text
-         
+            if textField.text!.count >= 5 {
+                let newPerson = Todo(context: self.context)
+                newPerson.todoList = textField.text
+                
+                
+                //TODO save the data
+                do {
+                    try self.context.save()
+                } catch {
+                    print("Error")
+                }
+            } else{
+                if textField.text == "" {
+                    self.buttonTapped(hello: "Enter Something")
+                }else {
+                    self.buttonTapped(hello: "Enter minimum 5 characters")
+                }
             
-            //TODO save the data
-            do {
-               try self.context.save()
-            } catch {
-                print("Error")
             }
-        }
-            
             //TODO refetch the data
             self.fetchTodoList()
+            
         }
-        
+        //cacnel button
+        let cancelButoon = UIAlertAction(title: "Cancel", style: .cancel)
         //add button
         alert.addAction(submitButton)
+        alert.addAction(cancelButoon)
         
         
         //show alert
         self.present(alert, animated: true, completion: nil)
+    }
+    @IBAction func addTapped(_ sender: Any) {
+        
+       buttonTapped(hello: "")
         
     }
-    
+    func editData() {
+        
+    }
     
 }
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         return items?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-       
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath)
         
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath)
         //get person from array and set the label
         let todoList = self.items![indexPath.row]
-        cell.textLabel?.text = ("\(indexPath.row+1).  \(todoList.todoList!)")
         
+        
+        cell.textLabel?.text = (todoList.todoList!)
+        cell.accessoryType = .none
+        cell.tintColor = UIColor.red
         return cell
     }
     
@@ -114,29 +145,33 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         let textfield = alert.textFields![0]
         textfield.text = todoList.todoList
         
+        
+        
         //configure button handler
         
         let saveButton = UIAlertAction(title: "Save", style: .default) { (action) in
             let textfield = alert.textFields![0]
-            
-            let editList = self.items?[indexPath.row]
-            //edit list property of list object
-            
-            editList?.todoList = textfield.text
-            
-            //save the data
-            
-            do {
-               try self.context.save()
-            } catch {}
-            
+            if textfield.text!.count >= 5 {
+                let editList = self.items?[indexPath.row]
+                //edit list property of list object
+                
+                editList?.todoList = textfield.text
+                
+                //save the data
+                
+                do {
+                    try self.context.save()
+                } catch {}
+                
+            }
             
             //refetch the data
             self.fetchTodoList()
         }
-        
+        let cancelButoon = UIAlertAction(title: "Cancel", style: .cancel)
         //add button
         alert.addAction(saveButton)
+        alert.addAction(cancelButoon)
         
         //show alert
         
@@ -165,14 +200,30 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             //refetch the data
             self.fetchTodoList()
             
-            
         }
         
         //return swipe actions
         
-         return UISwipeActionsConfiguration(actions: [action])
+        return UISwipeActionsConfiguration(actions: [action])
     }
     
+
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let action = UIContextualAction(style: .normal, title: "Done") {  (action, view, completionHandler) in
+            
+            if tableView.cellForRow(at: indexPath)?.accessoryType == UITableViewCell.AccessoryType.checkmark {
+                tableView.cellForRow(at: indexPath)?.accessoryType = UITableViewCell.AccessoryType.none
+            }else {
+                tableView.cellForRow(at: indexPath)?.accessoryType = UITableViewCell.AccessoryType.checkmark
+            }
+
+            
+        }
+        //return swipe actions
+                return UISwipeActionsConfiguration(actions: [action])
+        
+    }
     
 }
 
