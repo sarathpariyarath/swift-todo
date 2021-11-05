@@ -70,6 +70,7 @@ class ViewController: UIViewController {
             if textField.text!.count >= 5 {
                 let newTodo = Todo(context: self.context)
                 newTodo.todoList = textField.text
+               
                 
                 
                 //TODO save the data
@@ -125,11 +126,18 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath)
         //get person from array and set the label
         let todoList = self.items![indexPath.row]
+    
         
         
-        cell.textLabel?.text = (todoList.todoList!)
         cell.accessoryType = .none
         cell.tintColor = UIColor.red
+        if  todoList.state == true {
+            cell.textLabel?.text = "✔︎  \(todoList.todoList!)"
+        }else {
+            cell.textLabel?.text = "❍  \(todoList.todoList!)"
+        }
+        print("\(todoList.todoList!) \(todoList.state)")
+      
         return cell
     }
     
@@ -209,19 +217,16 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
 
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
-        let action = UIContextualAction(style: .normal, title: "Done") {  (action, view, completionHandler) in
-            
-            if tableView.cellForRow(at: indexPath)?.accessoryType == UITableViewCell.AccessoryType.none {
-                tableView.cellForRow(at: indexPath)?.accessoryType = UITableViewCell.AccessoryType.checkmark
-            }else {
-                tableView.cellForRow(at: indexPath)?.accessoryType = UITableViewCell.AccessoryType.none
-            }
-
-            
-        }
+        let hello = self.items?[indexPath.row]
+        hello?.state.toggle()
+        print(hello!)
+        let action = UIContextualAction(style: .normal, title: "Done") {  (action, view, completionHandler) in}
         //return swipe actions
-                return UISwipeActionsConfiguration(actions: [action])
+        do {
+            try self.context.save()
+        } catch{}
+        tableView.reloadData()
+        return UISwipeActionsConfiguration(actions: [action])
         
     }
     
