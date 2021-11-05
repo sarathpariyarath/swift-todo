@@ -16,8 +16,8 @@ extension Todo {
         return NSFetchRequest<Todo>(entityName: "Todo")
     }
 
-    @NSManaged public var todoList: String?
     @NSManaged public var state: Bool
+    @NSManaged public var todoList: String?
 
 }
 

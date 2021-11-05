@@ -68,8 +68,8 @@ class ViewController: UIViewController {
             textField.placeholder = "Enter Something"
             //TODO Create a person object
             if textField.text!.count >= 5 {
-                let newPerson = Todo(context: self.context)
-                newPerson.todoList = textField.text
+                let newTodo = Todo(context: self.context)
+                newTodo.todoList = textField.text
                 
                 
                 //TODO save the data
@@ -212,10 +212,10 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         
         let action = UIContextualAction(style: .normal, title: "Done") {  (action, view, completionHandler) in
             
-            if tableView.cellForRow(at: indexPath)?.accessoryType == UITableViewCell.AccessoryType.checkmark {
-                tableView.cellForRow(at: indexPath)?.accessoryType = UITableViewCell.AccessoryType.none
-            }else {
+            if tableView.cellForRow(at: indexPath)?.accessoryType == UITableViewCell.AccessoryType.none {
                 tableView.cellForRow(at: indexPath)?.accessoryType = UITableViewCell.AccessoryType.checkmark
+            }else {
+                tableView.cellForRow(at: indexPath)?.accessoryType = UITableViewCell.AccessoryType.none
             }
 
             
