@@ -13,7 +13,7 @@ class ViewController: UIViewController {
     
     
     
-   
+    
     @IBOutlet weak var tableView: UITableView!
     //reference to ns managed object context
     
@@ -21,11 +21,10 @@ class ViewController: UIViewController {
     
     //data for the table
     var items: [Todo]?
- 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //do any aditional setup after loading the view
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.yellow]
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -51,9 +50,9 @@ class ViewController: UIViewController {
     }
     func buttonTapped (hello: String) {
         let attributedString = NSAttributedString(string: hello, attributes: [
-                    NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15),
-                    NSAttributedString.Key.foregroundColor : UIColor.red
-                ])
+            NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15),
+            NSAttributedString.Key.foregroundColor : UIColor.red
+        ])
         //create alert
         let alert = UIAlertController.init(title: "Todo", message: "", preferredStyle: .alert)
         alert.setValue(attributedString, forKey: "attributedMessage")
@@ -70,7 +69,7 @@ class ViewController: UIViewController {
             if textField.text!.count >= 5 {
                 let newTodo = Todo(context: self.context)
                 newTodo.todoList = textField.text
-               
+                
                 
                 
                 //TODO save the data
@@ -85,7 +84,7 @@ class ViewController: UIViewController {
                 }else {
                     self.buttonTapped(hello: "Enter minimum 5 characters")
                 }
-            
+                
             }
             //TODO refetch the data
             self.fetchTodoList()
@@ -103,7 +102,7 @@ class ViewController: UIViewController {
     }
     @IBAction func addTapped(_ sender: Any) {
         
-       buttonTapped(hello: "")
+        buttonTapped(hello: "")
         
     }
     func editData() {
@@ -126,18 +125,22 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath)
         //get person from array and set the label
         let todoList = self.items![indexPath.row]
-    
+        
         
         
         cell.accessoryType = .none
         cell.tintColor = UIColor.red
         if  todoList.state == true {
-            cell.textLabel?.text = "✔︎  \(todoList.todoList!)"
+            cell.textLabel?.text = "✘  \(todoList.todoList!)"
+            cell.textLabel?.textColor = .red
+            
+            
         }else {
-            cell.textLabel?.text = "❍  \(todoList.todoList!)"
+            cell.textLabel?.text = "  \(todoList.todoList!)"
+            cell.textLabel?.textColor = .white
         }
         print("\(todoList.todoList!) \(todoList.state)")
-      
+        
         return cell
     }
     
@@ -215,12 +218,13 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         return UISwipeActionsConfiguration(actions: [action])
     }
     
-
+    
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let hello = self.items?[indexPath.row]
-        hello?.state.toggle()
+        
         print(hello!)
-        let action = UIContextualAction(style: .normal, title: "Done") {  (action, view, completionHandler) in}
+        let action = UIContextualAction(style: .destructive, title: "Mark as done") {  (action, view, completionHandler) in}
+        hello?.state.toggle()
         //return swipe actions
         do {
             try self.context.save()
