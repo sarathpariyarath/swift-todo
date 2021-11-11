@@ -17,7 +17,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     //reference to ns managed object context
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let context = CoredataManager.shared.persistentContainer.viewContext
     
     //data for the table
     var items: [Todo]?
@@ -131,8 +131,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         cell.accessoryType = .none
         cell.tintColor = UIColor.red
         if  todoList.state == true {
-            cell.textLabel?.text = "✘  \(todoList.todoList!)"
-            cell.textLabel?.textColor = .red
+            cell.textLabel?.text = "✓  \(todoList.todoList!)"
             
             
         }else {
